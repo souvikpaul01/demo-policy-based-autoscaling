@@ -77,3 +77,37 @@ Finally, in order to start the webhook server for receiving the alerts from the 
  * Debugger PIN: 285-730-350
 
 ```
+# Set-up Webhook Server/Autoscaler Agent
+Configure prometheus and alertmanager, which are used to send alerts to the webhook server. The prometheus and alertmanager are set up manually on the monitoring server. Here, we assume that the user has already downloaded and installed prometheus and alertmanager in the monitoring server. This can be done from the official guide of Prometheus [here](https://prometheus.io/docs/prometheus/latest/installation/) and Alertmanager [here](https://prometheus.io/docs/alerting/latest/alertmanager/).
+
+For the prometheus and alertmanager, it is important to keep the files in the dir /etc/prometheus and /etc/alertmanager and the prometheus.service and alertmanager.service files in /etc/systemd/system.
+
+Assuming that the user is in the /home/ubuntu, and the configurations can be changed or modified default using the following steps
+# Create or Update the prometheus.service
+```
+$ cd /etc/systemd/system
+$ sudo nano prometheus.service
+
+```
+And copy the following steps in the prometheus.service file
+```
+[Unit]
+Description=Prometheus
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+User=prometheus
+Group=prometheus
+Type=simple
+ExecStart=/usr/local/bin/prometheus \
+    --config.file /etc/prometheus/prometheus.yml \
+    --storage.tsdb.path /var/lib/prometheus/ \
+    --web.console.templates=/etc/prometheus/consoles \
+    --web.console.libraries=/etc/prometheus/console_libraries
+
+[Install]
+WantedBy=multi-user.target
+
+
+```
