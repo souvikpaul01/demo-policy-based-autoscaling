@@ -198,3 +198,37 @@ scrape_configs:
       - targets: ['localhost:9100','targetIp:9100','172.17.67.188:9100','172.17.65.63:9100']
 
 ```
+# Create or Update alert_rules.yml
+```
+$ sudo nano /etc/prometheus/alert_rules.yml
+```
+And copy the following steps in the alert_rules.yml file
+
+```
+groups:
+ - name: example
+   rules:
+   - alert: InstanceDown
+     expr: up == 0
+     for: 1m
+
+   - alert: HighCpuLoad
+     expr: 100 - (avg by(instance) (irate(node_cpu_seconds_total{mode="idle"}[1m])) * 100) > 80
+     for: 1m
+   - alert: LowCpuLoad
+     expr: 100 - (avg by(instance) (irate(node_cpu_seconds_total{mode="idle"}[1m])) * 100) < 20
+     for: 1m
+
+```
+Now, all the configuration files and rules are defined, then start the alertmanager and prometheus services based on the following commands
+```
+$ sudo systemctl daemon-reload
+$ sudo systemctl start alertmanager
+$ sudo systemctl start prometheus
+
+```
+Now, the services running time is used to check their status if they are running properly
+```
+$ sudo systemctl status prometheus
+```
+
