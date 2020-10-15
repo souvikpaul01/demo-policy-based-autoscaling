@@ -32,4 +32,19 @@ Change the working directory of the downloaded project. Before deploy the applic
 cd demo-policy-based-autoscaling
 
 ```
+In the virtual environment, configure the requirements for python using pip
+
+```
+pip install flask
+pip install ruamel.yaml
+
+```
+Now the main components of the auto-scaler agent are set up. In order to have access to the Openstack environment, where the VM instances are deployed, Openstack SDK is used to get access to the environment. For this, initially download the Openstack RC file(ldpc-openrc.sh) and use the following command
+
+```
+(.venv) $ source ldpc-openrc.sh
+(.venv) $ nova list
+
+```
+
 
