@@ -46,5 +46,34 @@ Now the main components of the auto-scaler agent are set up. In order to have ac
 (.venv) $ nova list
 
 ```
+If the ‘nova list’ gives the list of servers deployed in Openstack, it confirms the connection is established. Next to make sure that the servers can be deployed and accessed with the same ssh key. This can be established with the following commands
 
+```
+(.venv) $ eval `ssh-agent`
+(.venv) $ ssh pathToKey/KeyName.pem
+(.venv) $ ssh-add -L
 
+```
+Now access configurations are done. The initial/base deployment of the server before starting the auto-scaler agent, assuming that the service.yaml file is ready to use
+```
+(.venv) $ opera deploy service.yaml
+```
+Finally, in order to start the webhook server for receiving the alerts from the alertmanager and trigger the autoscaler for the Scale-Up/Scale-Down, following file is used
+```
+(.venv) $ python server.py
+```
+ If the setup is done correctly and webhook is running, the following block is shown as output
+ 
+ ```
+(.venv) $ python server.py
+ * Serving Flask app "server" (lazy loading)
+ * Environment: production
+   WARNING: This is a development server. Do not use it in a production deployment.
+   Use a production WSGI server instead.
+ * Debug mode: on
+ * Running on http://0.0.0.0:5004/ (Press CTRL+C to quit)
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger PIN: 285-730-350
+
+```
