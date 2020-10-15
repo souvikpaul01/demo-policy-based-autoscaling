@@ -111,3 +111,90 @@ WantedBy=multi-user.target
 
 
 ```
+# Create or Update the alertmanager.service
+```
+$ cd /etc/systemd/system
+$ sudo nano alertmanager.service
+
+```
+And copy the following steps in the alertmanager.service file
+```
+[Unit]
+Description=AlertManager Server Service
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+User=root
+Group=root
+Type=Simple
+ExecStart=/usr/local/bin/alertmanager \
+    --config.file /etc/alertmanager/alertmanager.yml
+
+[Install]
+WantedBy=multi-user.target
+
+```
+# Create or Update alertmanager.yml
+
+```
+$ sudo nano /etc/alertmanager/alertmanager.yml
+```
+
+And copy the following steps in the alertmanager.yml file
+```
+global:
+  resolve_timeout: 20s
+
+route:
+  group_by: ['alertname']
+  group_wait: 10s
+  group_interval: 10s
+  repeat_interval: 1h
+  receiver: 'web.hook'
+receivers:
+- name: 'web.hook'
+  webhook_configs:
+  - url: 'http://webhookIp:5004/prometheus'
+
+```
+# Create or Update prometheus.yml
+```
+$ sudo nano /etc/prometheus/prometheus.yml
+```
+And copy the following steps in the prometheus.yml file
+```
+# my global config
+global:
+  scrape_interval:     15s # Set the scrape interval to every 15 seconds. Default is every 1 minute.
+  evaluation_interval: 15s # Evaluate rules every 15 seconds. The default is every 1 minute.
+  # scrape_timeout is set to the global default (10s).
+# Alertmanager configuration
+alerting:
+  alertmanagers:
+  - static_configs:
+    - targets:
+      - localhost:9093
+
+# Load rules once and periodically evaluate them according to the global 'evaluation_interval'.
+rule_files:
+  - "alert_rules.yml"
+  # - "second_rules.yml"
+
+# A scrape configuration containing exactly one endpoint to scrape:
+# Here it's Prometheus itself.
+scrape_configs:
+  # The job name is added as a label `job=<job_name>` to any timeseries scraped from this config.
+  - job_name: 'prometheus'
+
+    # metrics_path defaults to '/metrics'
+    # scheme defaults to 'http'.
+
+    static_configs:
+    - targets: ['localhost:9090']
+
+  - job_name: node-exporters
+    static_configs:
+      - targets: ['localhost:9100','targetIp:9100','172.17.67.188:9100','172.17.65.63:9100']
+
+```
