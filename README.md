@@ -215,3 +215,6 @@ Now, the services running time is used to check their status if they are running
 $ sudo systemctl status prometheus
 ```
 
+# Acknowledgement
+
+This project has received funding from the European Union’s Horizon 2020 research and innovation programme under Grant Agreement No. 825040 (RADON)
