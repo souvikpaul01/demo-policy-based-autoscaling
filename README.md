@@ -18,3 +18,12 @@ $ python3 -m venv .venv && . .venv/bin/activate
 (.venv) $ pip install opera
 
 ```
+The OpenStack modules from Ansible playbooks is quite common, thus we can install opera with all required OpenStack libraries by running the following command:
+```
+(.venv) $ pip install -U opera[openstack]
+```
+After setup of the XOpera and Openstack SDK, it is required to clone the github repository in the opera folder consisting of the autoscaler agent with the following command:
+```
+git clone https://github.com/mainak89/demo-scaling 
+
+```
