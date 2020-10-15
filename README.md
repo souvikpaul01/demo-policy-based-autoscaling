@@ -24,6 +24,12 @@ The OpenStack modules from Ansible playbooks is quite common, thus we can instal
 ```
 After setup of the XOpera and Openstack SDK, it is required to clone the github repository in the opera folder consisting of the autoscaler agent with the following command:
 ```
-git clone https://github.com/mainak89/demo-scaling 
+git clone https://github.com/radon-h2020/demo-policy-based-autoscaling
 
 ```
+Change the working directory of the downloaded project. Before deploy the application, prepare the python environment and install necessary requirements. It is recommended that a Python virtual environment is used while installing the opera. This is an isolated and self-contained directory tree that contains a particular version of Python and installs additional packages.
+```
+cd demo-policy-based-autoscaling
+
+```
+
